@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using StatelessWebAPI.Caching;
 using StatelessWebAPI.Data;
 
 namespace StatelessWebAPI
@@ -28,6 +29,7 @@ namespace StatelessWebAPI
 
             // Application services
             services.AddDataServices(Configuration);
+            services.AddCacheServices();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -51,6 +53,9 @@ namespace StatelessWebAPI
             {
                 endpoints.MapControllers();
             });
+
+            // Initialize Redis cache
+            app.InitializeCache();
         }
     }
 }
