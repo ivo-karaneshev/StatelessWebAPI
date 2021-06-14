@@ -11,7 +11,7 @@ namespace StatelessWebAPI.Caching.Services
         private readonly ConnectionManager _connectionManager;
 
         private IDatabase _db => _connectionManager.Database;
-        private TimeSpan _defaultExpirationTime;
+        private int _cacheExpirationTime;
 
         public RedisCachingProvider(
             ConnectionManager connectionManager,
@@ -19,15 +19,16 @@ namespace StatelessWebAPI.Caching.Services
         {
             _connectionManager = connectionManager;
 
-            // Set default expiration
-            // Will throw an exception if config is missing or invalid
-            var expiration = int.Parse(configuration["CacheDefaultExpirationMinutes"]);
-            _defaultExpirationTime = TimeSpan.FromMinutes(expiration);
+            int.TryParse(configuration["CacheExpirationTimeMinutes"], out _cacheExpirationTime);
         }
 
-        public Task SetValueAsync<T>(string key, T value)
+        public async Task SetValueAsync<T>(string key, T value)
         {
-            return _db.StringSetAsync(key, JsonConvert.SerializeObject(value));
+            await _db.StringSetAsync(key, JsonConvert.SerializeObject(value));
+            if (_cacheExpirationTime > 0)
+            {
+                await _db.KeyExpireAsync(key, TimeSpan.FromMinutes(_cacheExpirationTime));
+            }
         }
 
         public async Task<T> GetValueAsync<T>(string key)
@@ -44,16 +45,6 @@ namespace StatelessWebAPI.Caching.Services
         public Task InvalidateAsync(string key)
         {
             return _db.KeyDeleteAsync(key);
-        }
-
-        public Task SetExpirationAsync(string key, TimeSpan? expiration = null)
-        {
-            if (expiration == null)
-            {
-                expiration = _defaultExpirationTime;
-            }
-
-            return _db.KeyExpireAsync(key, expiration);
         }
     }
 }

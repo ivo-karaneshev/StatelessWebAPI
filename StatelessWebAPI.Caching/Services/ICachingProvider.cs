@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace StatelessWebAPI.Caching.Services
 {
@@ -28,13 +27,5 @@ namespace StatelessWebAPI.Caching.Services
         /// <param name="key"></param>
         /// <returns></returns>
         Task InvalidateAsync(string key);
-
-        /// <summary>
-        /// Sets expiration for cached value by key.
-        /// </summary>
-        /// <param name="key"></param>
-        /// <param name="expiration"></param>
-        /// <returns></returns>
-        Task SetExpirationAsync(string key, TimeSpan? expiration = null);
     }
 }
