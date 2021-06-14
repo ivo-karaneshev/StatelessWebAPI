@@ -11,6 +11,9 @@ namespace StatelessWebAPI.Caching
             // Add connection manager
             services.AddSingleton<ConnectionManager>();
 
+            // Add Redis caching provider
+            services.AddSingleton<ICachingProvider, RedisCachingProvider>();
+
             return services;
         }
 

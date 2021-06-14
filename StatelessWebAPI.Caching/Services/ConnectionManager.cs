@@ -3,7 +3,7 @@ using StackExchange.Redis;
 
 namespace StatelessWebAPI.Caching.Services
 {
-    internal class ConnectionManager
+    public class ConnectionManager
     {
         private static ConnectionMultiplexer _connection;
         private readonly string _connectionString;
@@ -21,6 +21,8 @@ namespace StatelessWebAPI.Caching.Services
             }
         }
 
-        public ConnectionMultiplexer Connection => _connection;
+        //public ConnectionMultiplexer Connection => _connection;
+
+        public IDatabase Database => _connection.GetDatabase();
     }
 }

@@ -8,7 +8,7 @@ namespace StatelessWebAPI.Data.Services
     {
         private readonly GameDbContext _dbContext;
 
-        internal GameDataService(GameDbContext dbContext)
+        public GameDataService(GameDbContext dbContext)
         {
             _dbContext = dbContext;
         }
