@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using StatelessWebAPI.Data.Services;
+using System.Reflection;
 
 namespace StatelessWebAPI.Data
 {
@@ -12,9 +13,12 @@ namespace StatelessWebAPI.Data
             this IServiceCollection services,
             IConfiguration configuration)
         {
+            var assembly = Assembly.GetAssembly(typeof(ConfigurationExtensions)).GetName();
             // Add Db context
             services.AddDbContext<GameDbContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+                options.UseSqlServer(
+                    configuration.GetConnectionString("DefaultConnection"),
+                    x => x.MigrationsAssembly(assembly.Name)));
 
             // Add data service
             services.AddScoped<IGameDataService, GameDataService>();
