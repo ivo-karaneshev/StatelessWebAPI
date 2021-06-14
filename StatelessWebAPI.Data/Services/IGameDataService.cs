@@ -7,26 +7,25 @@ namespace StatelessWebAPI.Data.Services
     public interface IGameDataService
     {
         /// <summary>
-        /// Creates a new game and sets its state to <see cref="State.Bought"/>.
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <returns>The newly created game.</returns>
-        Task<Game> BuyGame(int userId);
-
-        /// <summary>
-        /// Changes game state.
+        /// Gets game by id.
         /// </summary>
         /// <param name="gameId"></param>
-        /// <param name="state"></param>
-        /// <returns>The updated game or null if not found.</returns>
-        Task<Game> ChangeGameState(int gameId, State state);
+        /// <returns>The game found, or null.</returns>
+        ValueTask<Game> GetGameAsync(int gameId);
 
         /// <summary>
-        /// Gets game state.
+        /// Creates the given game.
         /// </summary>
-        /// <param name="gameId"></param>
-        /// <returns>The state of the game or null if not found.</returns>
-        Task<State?> GetGameState(int gameId);
+        /// <param name="game"></param>
+        /// <returns>The newly created game with unique <see cref="Game.Id"/>.</returns>
+        Task<Game> CreateGameAsync(Game game);
+
+        /// <summary>
+        /// Updates the given game.
+        /// </summary>
+        /// <param name="game"></param>
+        /// <returns></returns>
+        Task UpdateGameAsync(Game game);
 
         /// <summary>
         /// Gets all games for a specific user.
@@ -34,5 +33,12 @@ namespace StatelessWebAPI.Data.Services
         /// <param name="userId"></param>
         /// <returns>All games for the specified user.</returns>
         IQueryable<Game> GetUserGames(int userId);
+
+        /// <summary>
+        /// Deletes game by id.
+        /// </summary>
+        /// <param name="gameId"></param>
+        /// <returns></returns>
+        Task DeleteGameAsync(Game game);
     }
 }

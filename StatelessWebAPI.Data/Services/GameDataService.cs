@@ -13,46 +13,35 @@ namespace StatelessWebAPI.Data.Services
             _dbContext = dbContext;
         }
 
-        public async Task<Game> BuyGame(int userId)
+        public ValueTask<Game> GetGameAsync(int gameId)
         {
-            var game = new Game
-            {
-                State = State.Bought,
-                UserId = userId
-            };
+            return _dbContext.FindAsync<Game>(gameId);
+        }
 
+        public async Task<Game> CreateGameAsync(Game game)
+        {
             await _dbContext.AddAsync(game);
             await _dbContext.SaveChangesAsync();
 
             return game;
         }
 
-        public async Task<Game> ChangeGameState(int gameId, State state)
+        public Task UpdateGameAsync(Game game)
         {
-            var game = await _dbContext.FindAsync<Game>(gameId);
-            if (game != null)
-            {
-                game.State = state;
-                await _dbContext.SaveChangesAsync();
-            }
+            _dbContext.GameItems.Update(game);
 
-            return game;
-        }
-
-        public async Task<State?> GetGameState(int gameId)
-        {
-            var game = await _dbContext.FindAsync<Game>(gameId);
-            if (game == null)
-            {
-                return null;
-            }
-
-            return game.State;
+            return _dbContext.SaveChangesAsync();
         }
 
         public IQueryable<Game> GetUserGames(int userId)
         {
             return _dbContext.GameItems.Where(x => x.UserId == userId);
+        }
+
+        public async Task DeleteGameAsync(Game game)
+        {
+            _dbContext.Remove(game);
+            await _dbContext.SaveChangesAsync();
         }
     }
 }

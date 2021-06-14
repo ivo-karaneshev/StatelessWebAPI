@@ -33,6 +33,11 @@ namespace StatelessWebAPI.Caching.Services
         public async Task<T> GetValueAsync<T>(string key)
         {
             var result = await _db.StringGetAsync(key);
+            if (result.IsNullOrEmpty)
+            {
+                return default(T);
+            }
+
             return JsonConvert.DeserializeObject<T>(result);
         }
 
