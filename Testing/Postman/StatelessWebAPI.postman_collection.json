@@ -228,7 +228,7 @@
 			"response": []
 		},
 		{
-			"name": "GetGame",
+			"name": "Get",
 			"event": [
 				{
 					"listen": "test",
@@ -267,7 +267,7 @@
 			"response": []
 		},
 		{
-			"name": "DeleteGame",
+			"name": "Delete",
 			"event": [
 				{
 					"listen": "test",
