@@ -1,0 +1,339 @@
+{
+	"info": {
+		"_postman_id": "2f67812a-ad91-4b51-83ab-8eed3bf28f7c",
+		"name": "StatelessWebAPI",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Buy",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Successful POST request\", function () {\r",
+							"    pm.expect(pm.response.code).to.equal(201);\r",
+							"});\r",
+							"\r",
+							"var gameId = pm.response.json().id;\r",
+							"pm.test(\"Game ID greater than 0\", function () {\r",
+							"    pm.expect(gameId).to.be.greaterThan(0);\r",
+							"});\r",
+							"\r",
+							"pm.collectionVariables.set(\"gameId\", gameId);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": "*/*"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:23749/api/game/buy/{{userId}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "23749",
+					"path": [
+						"api",
+						"game",
+						"buy",
+						"{{userId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Play",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Game state set to 'Play'\", function () {\r",
+							"    var state = pm.response.json().state;\r",
+							"    pm.expect(state).to.equal(\"Play\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "accept",
+						"value": "text/plain"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:23749/api/game/play/{{gameId}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "23749",
+					"path": [
+						"api",
+						"game",
+						"play",
+						"{{gameId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Finish",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Game state set to 'Finish'\", function () {\r",
+							"    var state = pm.response.json().state;\r",
+							"    pm.expect(state).to.be.oneOf([\"Bought\", \"Play\", \"Finish\"]);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "accept",
+						"value": "text/plain"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:23749/api/game/finish/{{gameId}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "23749",
+					"path": [
+						"api",
+						"game",
+						"finish",
+						"{{gameId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetGameState",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Game state is valid\", function () {\r",
+							"    var state = pm.response.json();\r",
+							"    pm.expect(state).to.equal(\"Finish\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "accept",
+						"value": "text/plain"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:23749/api/game/get-game-state/{{gameId}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "23749",
+					"path": [
+						"api",
+						"game",
+						"get-game-state",
+						"{{gameId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetUserGames",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "accept",
+						"value": "text/plain"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:23749/api/game/get-user-games/{{userId}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "23749",
+					"path": [
+						"api",
+						"game",
+						"get-user-games",
+						"{{userId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetGame",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "accept",
+						"value": "text/plain"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:23749/api/game/{{gameId}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "23749",
+					"path": [
+						"api",
+						"game",
+						"{{gameId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DeleteGame",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 204\", function () {\r",
+							"    pm.response.to.have.status(204);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "accept",
+						"value": "*/*"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:23749/api/game/{{gameId}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "23749",
+					"path": [
+						"api",
+						"game",
+						"{{gameId}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "userId",
+			"value": "1"
+		},
+		{
+			"key": "gameId",
+			"value": "1"
+		}
+	]
+}
